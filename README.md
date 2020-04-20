@@ -1,6 +1,6 @@
 #Backend-server
 
-Este es el codigo necesario para establecer el backend conectado a mongoDB 3.2 con "c:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --storageEngine=mmapv1 por tener windows x32
+Este es el codigo necesario para establecer el backend conectado a mongoDB 3.2
 usando mongoose.
 
 para ejecutarlo, es necesario reconstruir los modulos de node usando el comando
