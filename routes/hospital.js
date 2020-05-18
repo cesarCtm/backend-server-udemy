@@ -61,13 +61,12 @@ app.put('/:id', mdAutenticacion.verificaToken,(req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'el hospital con el id '+id+' no existe',
-                errors: { message : 'No existe elid de e ese usuario'}
+                errors: { message : 'No existe ese hospital'}
             });
         }
 
         hospital.nombre = body.nombre;
-        hospital.hospital = req.usuario._id;
-        hospital.usuario = body.usuario;
+        hospital.usuario = req.usuario._id;
  
         hospital.save( (err, hospitalGuardado) => {
             if(err){
@@ -97,7 +96,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res)=>{
 
     var hospital = new Hospital({
         nombre: body.nombre,
-        usuario: req.usuario_id,
+        usuario: req.usuario._id,
     });
 
     hospital.save( (err, hospitalGuardado ) => {
@@ -147,4 +146,34 @@ app.delete('/:id', mdAutenticacion.verificaToken,(req, res) => {
     });
 
 });
+
+// ==========================================
+// Obtener Hospital por ID
+// ==========================================
+app.get('/:id', (req, res) => {
+    var id = req.params.id;
+    Hospital.findById(id)
+    .populate('usuario', 'nombre img email')
+    .exec((err, hospital) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar hospital',
+                errors: err
+            });
+        }
+        if (!hospital) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El hospital con el id ' + id + 'no existe',
+                errors: { message: 'No existe un hospital con ese ID' }
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            hospital: hospital
+        });
+    })
+})
+            
 module.exports = app;
