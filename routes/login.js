@@ -32,6 +32,23 @@ async function verify(token) {
         google: true
     }
   }
+
+  var mdAutenticacion = require('../middlewares/autenticacion');
+// =============================================
+// RENOVAR TOKEN
+// =============================================
+app.get('/renuevatoken', mdAutenticacion.verificaToken, (req,res)=>{
+    
+    var token = jwt.sign({ usuario: req.usuario }, SEED, { expiresIn: 14400 });//4 horas
+
+    res.status(200).json({
+        ok: true,
+        token: token
+    });
+
+});
+
+
 // =============================================
 // autenticacion cpm google
 // =============================================
